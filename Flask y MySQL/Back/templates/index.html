@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<br>
+<br>
+<div class="row">
+
+    
+    <!--Formulario-->
+    <div class="col-md-5">
+
+
+        <!--Forma de utilizar logica con HTML-->
+        <!--Motor de plantillas jinja2. Existen muchos motores de plantilla, Flask utiliza Jinja2-->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for m in messages %}
+            <div class="alert alert-active alert-dismissible fade show" role="alert" style="width:360px;height: 41px; vertical-align: center">
+                <p><strong>{{m}}</strong></p>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+
+        <div class="card text-white bg-dark mb-3" style="text-align: center; width:360px">
+            
+            <div class="card-header" style="font-weight: bold;">FORMULARIO DE REGISTRO</div>
+
+            <div class="card-body">
+                <!--Este formulario envía el post a la ruta especificada-->
+                <form action="/add_contact" method="POST">
+                    <!--Lo que se escriba dentro del input, se va a recibir como valor de ese nombre-->
+                    <input type="text" name="fullname" placeholder="Fullname" class="form-control" style="width: 300px; margin-right: auto; margin-left: auto">
+                    <br>
+                    <input type="text" name="phone" placeholder="Phone" class="form-control" style="width: 300px; margin-right: auto; margin-left: auto">
+                    <br>
+                    <input type="text" name="email" placeholder="Email" class="form-control" style="width: 300px; margin-right: auto; margin-left: auto"> 
+                    <br>
+                    <button type="submit" class="btn btn-success" style="width: 300px; margin-right: auto; margin-left: auto">SAVE</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--Tabla-->
+    <div class="col-md-17">
+
+        <table class="table table-hover" style="text-align: center">
+            <thead>
+                <tr class="table-active" style="font-weight: bold;">
+                    <td>ID</td>
+                    <td>FULLNAME</td>
+                    <td>PHONE</td>
+                    <td>EMAIL</td>
+                    <td>OPERATIONS</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contacto in contactos %}
+                    <tr>
+                        <td>{{contacto.0}}</td>
+                        <td>{{contacto.1}}</td>
+                        <td>{{contacto[2]}}</td>
+                        <td>{{contacto[3]}}</td>
+                        <td>
+                            <a href="/edit/{{contacto.0}}" class="btn btn-success" style="width:71px; margin-right: 12px">EDIT</a>
+                            <a href="/delete/{{contacto.0}}" class="btn btn-success" style="width: 71px">DELETE</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+{% endblock %}
