@@ -5,10 +5,9 @@ import random
 import xlsxwriter
 
 
-
 ## ----------------------- MODELO -------------------------------
 ## Indicación de Solver
-opt = SolverFactory('glpk')
+opt = SolverFactory('cplex', executable="C:\\Program Files\\IBM\\ILOG\\CPLEX_Studio128\\cplex\\bin\\x64_win64\\cplex")
 model = AbstractModel()
 
 ## Conjuntos ------------------------------------------------------------------------
