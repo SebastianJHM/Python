@@ -64,11 +64,12 @@ def r9( model, ref, rack ):
 model.r9 = pyo.Constraint( model.REF, model.RACKS, rule = r9 )
 
 
-## Create a model instance and optimize
+## ============= Create a model instance and optimize =================
 instance = model.create_instance('datos_tesis_542.dat')
 opt.options['timelimit'] = 1500
-results = opt.solve(instance, tee=False)
-instance.display()
+results = opt.solve(instance, tee = False)
+#instance.display()
+## ====================================================================
 
 def print_result_console( instance ):
     print("\n\n")
@@ -88,15 +89,3 @@ def print_result_console( instance ):
 #fed
     
 print_result_console( instance )
-
-
-
-
-
-
-
-
-
-
-
-

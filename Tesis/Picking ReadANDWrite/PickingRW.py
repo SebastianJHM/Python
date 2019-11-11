@@ -6,11 +6,12 @@ import copy
 import random
 import xlsxwriter
 import sys
+import numpy as np
 
 def lecturaDatos():
     ## --------------------- LEER ARCHIVO EXCEL CON OPENPYXL -----------------------------------
     ## Abrir el archivo y guardar en la variable archivo
-    archivo = openpyxl.load_workbook('Datos.xlsx', data_only = True)
+    archivo = openpyxl.load_workbook('Datos_Picking.xlsx', data_only = True)
 
     ## Leer las hojas del archivo, Seleccionar la primera hoja y la columna D
     sheets = archivo.sheetnames
@@ -82,7 +83,7 @@ def lecturaDatos():
     for i in  range(sheetDistancias.min_row + 1,sheetDistancias.max_row + 1):
         y = []
         for j in range(sheetDistancias.min_column + 1, sheetDistancias.max_column + 1):
-            y.append(sheetDistancias.cell(row = i, column = j).value)
+            y.append(float(sheetDistancias.cell(row = i, column = j).value))
         #rof
         dist.append(y)
     #rof
@@ -277,22 +278,20 @@ def imprimirResultadosConsola():
 
 
 
-
-
-
-
 ## Lectura de datos con OPENPYXL
 n, o, ref, ubic, ordenesExcel, rExcel, dist = lecturaDatos()
 
 
 ## Crear Modelo Lineal con PYOMO, resolverlo con GLPK y guardarlo en variable model
-opt = SolverFactory('glpk')
+opt = SolverFactory('cplex', executable="C:\\Program Files\\IBM\\ILOG\\CPLEX_Studio128\\cplex\\bin\\x64_win64\\cplex")
+#opt = SolverFactory('glpk')
 model = AbstractModel()
 modeloLineal(n, o, ref, ubic, ordenesExcel, rExcel, dist)
 
 ## Crear una instancia del modelo y ejecutarla
 instance = model.create_instance() 
-results = opt.solve(instance, timelimit = 2)
+opt.options['timelimit'] = 120
+results = opt.solve(instance, tee = False)
 #instance.display()
 
 
@@ -300,28 +299,6 @@ results = opt.solve(instance, timelimit = 2)
 imprimirResultadosConsola()
 
 ## Crear archivo e imprimir resultados xlsxwriter
-imprimirResultadosXLSX
-
-## Iterar el modelo cambiando el parámetro de asignación
-for iteration in range(1,5):
-    print("------------- ITERACION ",iteration," ------------------")
-
-    x = []
-    for i in range(0,41):
-        x.append(random.randint(1, 18))
-    #rof
-    dictionary = dict(zip(range(0,41), x))
-    dictionary[0] = 0
-    print(dictionary)
-    
-    for i in instance.REF:
-        for j in instance.REF:
-            instance.Distancia_R[(i,j)] = instance.Distancia[dictionary[i],dictionary[j]]
-        #rof
-    #rof
+imprimirResultadosXLSX()
 
 
-
-    results = opt.solve(instance, timelimit =  2)
-    imprimirResultadosConsola()
-#rof
