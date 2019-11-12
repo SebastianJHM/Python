@@ -66,7 +66,7 @@ model.r9 = pyo.Constraint( model.REF, model.RACKS, rule = r9 )
 
 ## ============= Create a model instance and optimize =================
 instance = model.create_instance('datos_tesis_542.dat')
-opt.options['timelimit'] = 1500
+opt.options['timelimit'] = 20
 results = opt.solve(instance, tee = False)
 #instance.display()
 ## ====================================================================
