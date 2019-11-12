@@ -1,9 +1,10 @@
 import sys
 import random
 import copy
+import numpy as np
 
 def aleatorio( inf, sup ):
-    result = int( inf + ( sup - inf + 1 ) * random.random() )
+    result = int( inf + ( sup - inf + 1 ) * random.uniform(0,1) )
     return( result )
 #fed
     
@@ -13,7 +14,7 @@ def inicializar_matriz():
         y = []
         for j in range(10):
             if ( i != j ):
-                y.append( aleatorio( 20, 50) )
+                y.append( aleatorio( 20, 1000) )
             else:
                 y.append(0)
             #fi
@@ -128,16 +129,18 @@ def incersion(distancias, n_nodos):
 
 def principal( argv ):
     
-    # distancias, n_nodos = inicializar_matriz()
-    distancias = [
-        [0, 51, 30, 27, 44, 25, 42],
-        [28, 0, 31, 35, 47, 20, 31],
-        [29, 22, 0, 48, 36, 23, 38],
-        [21, 44, 43, 0, 38, 26, 31],
-        [46, 31, 40, 45, 0, 21, 34],
-        [38, 38, 24, 26, 45, 0, 22],
-        [32, 32, 29, 39, 27, 21, 0]
-    ]
+    distancias, n_nodos = inicializar_matriz()
+    print(np.array(distancias))
+#    distancias = [
+#        [0, 51, 30, 27, 44, 25, 42],
+#        [28, 0, 31, 35, 47, 20, 31],
+#        [29, 22, 0, 48, 36, 23, 38],
+#        [21, 44, 43, 0, 38, 26, 31],
+#        [46, 31, 40, 45, 0, 21, 34],
+#        [38, 38, 24, 26, 45, 0, 22],
+#        [32, 32, 29, 39, 27, 21, 0]
+#    ]
+    
     
     ## Solo hay que llamar la función incersion mandandole una matriz y el número de nodos sin incluir el inicial
     ## La funcion devuelve el recorrido y la fo del recorrido
