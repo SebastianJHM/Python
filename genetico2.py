@@ -15,11 +15,11 @@ def funcion_objetivo( distancias, ruta ):
     return( acum )
 #fed
     
-def solucion_aleatoria( orden, distancias):
+def solucion_aleatoria( orden, distancias, num_it ):
     
     solucion_menor = []
     minimo = 10000000000000
-    for _ in range(1,10000):
+    for _ in range(num_it):
         verifica = [False] * len(orden)
         solucion = []
         for i in range(len(orden)):
@@ -65,7 +65,7 @@ def principal( argv ):
         [38, 38, 43, 42, 41, 43, 27, 37, 35, 37, 28, 32, 30, 50, 36, 38, 34, 20, 0]
     ]
     orden = [5, 2, 1, 18, 7, 11, 6, 14, 8, 3]
-    ruta, fo = solucion_aleatoria( orden, distancias)
+    ruta, fo = solucion_aleatoria( orden, distancias, 10000)
     print(ruta, fo)
 #fed
 
