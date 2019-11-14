@@ -1,43 +1,45 @@
 import sys
+import random
 import copy
 
+def aleatorio( inf, sup ):
+    result = int( inf + ( sup - inf + 1 ) * random.uniform(0,1) )
+    return( result )
+#fed
+    
 def funcion_objetivo( distancias, ruta ):
     acum = 0
     for k in range(len(ruta)-1):
         acum = acum + distancias[ruta[k]][ruta[k + 1]]
     #rof
-    
     return( acum )
 #fed
-
-def incersion( orden, distancias):
-    solucion = [0, 0]
-    verifica = [False]*(len(distancias) - 1)
     
-    for k in range(len(orden)):
-        minimo = 1000000000000
-        #print("=========================================================")
-        for i in range(1,len(solucion)):
-            x = copy.deepcopy( solucion )
-            #print("----------------------")
-            for ref in orden:
-                y = copy.deepcopy( x )
-                y.insert(i, ref)
-                fo = funcion_objetivo( distancias, y)
-                #print( y, fo)
-                if ( fo < minimo and verifica[ref-1] == False ):
-                    minimo = fo
-                    escogido = ref
-                    z = copy.deepcopy( y )
-                #fi
-            #rof
+def solucion_aleatoria( orden, distancias):
+    
+    solucion_menor = []
+    minimo = 10000000000000
+    for _ in range(1,10000):
+        verifica = [False] * len(orden)
+        solucion = []
+        for i in range(len(orden)):
+            pos = aleatorio(0,len(orden)-1)
+            while( verifica[pos] == True ):
+                pos = aleatorio(0,len(orden)-1)
+            #elihw
+            solucion.append( orden[pos] )
+            verifica[pos] = True
         #rof
-        verifica[escogido-1]  = True
-        solucion = copy.deepcopy( z )
-        #print("=========================================================")
-        #print( solucion, funcion_objetivo( distancias, solucion ))
+        solucion.insert(0, 0)
+        solucion.insert(len(solucion), 0)
+        
+        fo = funcion_objetivo( distancias, solucion )
+        if ( fo < minimo ):
+            minimo = fo
+            solucion_menor = copy.deepcopy( solucion)
+        #fi
     #rof
-    return( solucion, funcion_objetivo( distancias, solucion ))
+    return( solucion_menor, funcion_objetivo( distancias, solucion_menor ) )
 #fed
 
 def principal( argv ):
@@ -63,7 +65,7 @@ def principal( argv ):
         [38, 38, 43, 42, 41, 43, 27, 37, 35, 37, 28, 32, 30, 50, 36, 38, 34, 20, 0]
     ]
     orden = [5, 2, 1, 18, 7, 11, 6, 14, 8, 3]
-    ruta, fo = incersion( orden, distancias)
+    ruta, fo = solucion_aleatoria( orden, distancias)
     print(ruta, fo)
 #fed
 
