@@ -235,9 +235,10 @@ def principal( argv ):
     
     ## Asignacion de probabilidades y ordenar
     poblacion = asignacion_probabilidades( poblacion )
+    print(*poblacion)
     k = copy.copy(poblacion[0].fo)
     
-    for iteracion in range(100):
+    for iteracion in range(2):
         
         print("-------------- Iteración ", iteracion, "------------------")
     
