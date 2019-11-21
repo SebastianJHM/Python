@@ -41,7 +41,59 @@ def solucion_aleatoria( orden, distancias, num_it ):
     #rof
     return( solucion_menor, funcion_objetivo( distancias, solucion_menor ) )
 #fed
+    
+def incersion( orden, distancias):
+    solucion = [0, 0]
+    verifica = [False]*(len(distancias) - 1)
+    
+    for k in range(len(orden)):
+        minimo = 1000000000000
+        #print("=========================================================")
+        for i in range(1,len(solucion)):
+            x = copy.deepcopy( solucion )
+            #print("----------------------")
+            for ref in orden:
+                y = copy.deepcopy( x )
+                y.insert(i, ref)
+                fo = funcion_objetivo( distancias, y)
+                #print( y, fo)
+                if ( fo < minimo and verifica[ref-1] == False ):
+                    minimo = fo
+                    escogido = ref
+                    z = copy.deepcopy( y )
+                #fi
+            #rof
+        #rof
+        verifica[escogido-1]  = True
+        solucion = copy.deepcopy( z )
+        #print("=========================================================")
+        #print( solucion, funcion_objetivo( distancias, solucion ))
+    #rof
+    return( solucion, funcion_objetivo( distancias, solucion ))
+#fed
 
+def vecino_mas_cercano( orden, distancias):
+    
+    solucion = [0]
+    verifica = [False]*(len(orden))
+    
+    for i in range(len(orden)):
+        actual = solucion[len(solucion)-1]
+        minimo = 10000000000
+        for j in range(len(orden)):
+            if ( distancias[actual][orden[j]] <= minimo and verifica[j] == False ):
+                minimo = distancias[actual][orden[j]]
+                pos = j
+            #fi
+        #rof
+        verifica[pos] = True
+        actual = orden[pos]
+        solucion.append(actual)
+    #rof
+    solucion.append(0)
+    return(solucion, funcion_objetivo( distancias, solucion ))
+#fed
+    
 def principal( argv ):
     distancias = [
         [0, 30, 33, 35, 28, 44, 49, 29, 48, 32, 37, 43, 22, 40, 27, 39, 43, 29, 38],
@@ -66,6 +118,10 @@ def principal( argv ):
     ]
     orden = [5, 2, 1, 18, 7, 11, 6, 14, 8, 3]
     ruta, fo = solucion_aleatoria( orden, distancias, 1000)
+    print(ruta, fo)
+    ruta, fo = vecino_mas_cercano( orden, distancias )
+    print(ruta, fo)
+    ruta, fo = incersion( orden, distancias)
     print(ruta, fo)
 #fed
 
