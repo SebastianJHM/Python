@@ -65,7 +65,7 @@ def principal( argv ):
         [38, 38, 43, 42, 41, 43, 27, 37, 35, 37, 28, 32, 30, 50, 36, 38, 34, 20, 0]
     ]
     orden = [5, 2, 1, 18, 7, 11, 6, 14, 8, 3]
-    ruta, fo = solucion_aleatoria( orden, distancias, 10000)
+    ruta, fo = solucion_aleatoria( orden, distancias, 1000)
     print(ruta, fo)
 #fed
 
