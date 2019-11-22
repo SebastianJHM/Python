@@ -73,7 +73,6 @@ def incersion( orden, distancias):
 #fed
 
 def vecino_mas_cercano( orden, distancias):
-    
     solucion = [0]
     verifica = [False]*(len(orden))
     
