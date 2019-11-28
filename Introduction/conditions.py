@@ -53,7 +53,6 @@ def principal( argv ):
     print(result)
 
     text = "Este es el texto que hay que separar"
-    list1 = []
     list1 = separar(text)
     print(list1)
 #fed
