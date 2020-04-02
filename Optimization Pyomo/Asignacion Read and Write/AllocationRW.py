@@ -4,7 +4,6 @@ from pyomo.opt import SolverFactory
 import xlsxwriter
 import sys
 
-
 def read_data_XLSX_Alloc():
     ## --------------------- READ DATA EXCEL WHIT OPENPYXL -----------------------------------
     
@@ -196,14 +195,14 @@ def principal( argv ):
     set_REF , param_AnchoCaja, param_TipoDist, param_Espacios, param_Demanda, param_Frecuencia, set_RACKS, param_TipoRack, param_Pared, param_Utilizacion, param_Costo = read_data_XLSX_Alloc()
     
     ## DECLARE SOLVER, CREATE A PYOMO ABSTRACT MODEL, DECLARE LINEAR MODEL
-    opt = SolverFactory('cplex', executable="C:\\Program Files\\IBM\\ILOG\\CPLEX_Studio1210\\cplex\\bin\\x64_win64\\cplex")
+    opt = SolverFactory('cplex', executable="C:\\Program Files\\IBM\\ILOG\\CPLEX_Studio128\\cplex\\bin\\x64_win64\\cplex")
     model = pyo.AbstractModel()
     create_lineal_model_Alloc( model, set_REF , param_AnchoCaja, param_TipoDist, param_Espacios, param_Demanda, param_Frecuencia, set_RACKS, param_TipoRack, param_Pared, param_Utilizacion, param_Costo )
     
     ## CREATE AN INSTANCE OF THE MODEL, SOLVE PRINT RESULTS BY CONSOLE
     instance = model.create_instance()
     opt.options['timelimit'] = 40
-    results = opt.solve(instance, tee = False)
+    opt.solve(instance, tee = False)
     #instance.display()
     
     ## PRINT RESULTS IN CONSOLE

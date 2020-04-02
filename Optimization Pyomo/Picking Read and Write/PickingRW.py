@@ -1,64 +1,63 @@
-from pyomo.environ import *
+import pyomo.environ as pyo
 from pyomo.opt import SolverFactory
 import openpyxl
 from openpyxl.utils import get_column_letter
 import copy
-import random
 import xlsxwriter
 import sys
-import numpy as np
+
 
 def lecturaDatos():
     ## --------------------- LEER ARCHIVO EXCEL CON OPENPYXL -----------------------------------
     ## Abrir el archivo y guardar en la variable archivo
-    archivo = openpyxl.load_workbook('Datos_Picking.xlsx', data_only = True)
+    archivo = openpyxl.load_workbook('Data_Picking.xlsx', data_only = True)
 
-    ## Leer las hojas del archivo, Seleccionar la primera hoja y la columna D
+    ## READ SHEETS OF FILE AND SELECT THE THE FIRST SHEET
     sheets = archivo.sheetnames
     sheetDatos = archivo[sheets[0]]
 
-    ## NODOS
-    n = []
-    columnA = sheetDatos['A']
-    for x in range(len(columnA)): 
-        if (type(columnA[x].value) != str and columnA[x].value != None):
-            n.append(columnA[x].value)
+    ## NODES (set_Nodos)
+    set_Nodos = []
+    column = sheetDatos['A']
+    for x in range(len(column)): 
+        if (type(column[x].value) != str and column[x].value != None):
+            set_Nodos.append(column[x].value)
         #fi
     #rof
 
-    ## O
-    o = []
-    columnB = sheetDatos['B']
-    for x in range(len(columnB)): 
-        if (type(columnB[x].value) != str and columnB[x].value != None):
-            o.append(columnB[x].value)
+    ## ORDERS (set_Ords)
+    set_Ords = []
+    column = sheetDatos['B']
+    for x in range(len(column)): 
+        if (type(column[x].value) != str and column[x].value != None):
+            set_Ords.append(column[x].value)
         #fi
     #rof
 
 
-    ## REF
-    ref = []
-    columnC = sheetDatos['C']
-    for x in range(len(columnC)): 
-        if (type(columnC[x].value) != str and columnC[x].value != None):
-            ref.append(columnC[x].value)
+    ## REFERENCES (set_Referencias)
+    set_Referencias = []
+    column = sheetDatos['C']
+    for x in range(len(column)): 
+        if (type(column[x].value) != str and column[x].value != None):
+            set_Referencias.append(column[x].value)
         #fi
     #rof
 
-    ## NOD_REF
-    nr = []
-    columnF = sheetDatos['F']
-    for x in range(len(columnF)): 
-        if (type(columnF[x].value) != str and columnF[x].value != None):
-            nr.append(columnF[x].value)
-        #fi
-    #rof
-    ubic = dict(zip(ref, nr))
-
-
-    ## ORDENES y R
+    ## LOCATION OF EACH REFERENCE (param_NOD_REF)
     lect = []
-    for i in range(len(o)):
+    column = sheetDatos['F']
+    for x in range(len(column)): 
+        if (type(column[x].value) != str and column[x].value != None):
+            lect.append(column[x].value)
+        #fi
+    #rof
+    param_NOD_REF = dict(zip(set_Referencias, lect))
+
+
+    ## Ordenes y Variable auxiliar (set_Ordenes y set_R)
+    lect = []
+    for i in range(len(set_Ords)):
         column = sheetDatos[get_column_letter( 8 + i )]
         orden = []
         for x in range(len(column)): 
@@ -68,135 +67,133 @@ def lecturaDatos():
         #rof
         lect.append(orden)
     #rof
-    ordenesExcel = dict(zip(o, lect))
+    set_Ordenes = dict(zip(set_Ords, lect))
 
     lectR = copy.deepcopy(lect) ## Esto es demencial
     for x in lectR:
         x.remove(0)
     #rof
-    rExcel = dict(zip(o, lectR))
+    set_R = dict(zip(set_Ords, lectR))
 
 
-    ## Distancia
-    dist = []
+    ## DISTANCE MATRIX
+    param_Distancia = []
     sheetDistancias = archivo[sheets[1]]
     for i in  range(sheetDistancias.min_row + 1,sheetDistancias.max_row + 1):
         y = []
         for j in range(sheetDistancias.min_column + 1, sheetDistancias.max_column + 1):
-            y.append(float(sheetDistancias.cell(row = i, column = j).value))
+            y.append(sheetDistancias.cell(row = i, column = j).value)
         #rof
-        dist.append(y)
+        param_Distancia.append(y)
     #rof
     ## -------------------------------------------------------------------------------
     
-    return(n, o, ref, ubic, ordenesExcel, rExcel, dist)
+    return( set_Nodos, set_Ords, set_Referencias, param_NOD_REF, set_Ordenes, set_R, param_Distancia )
 #fed
 
-def modeloLineal(n, o, ref, ubic, ordenesExcel, rExcel, dist):
+def modeloLineal(model, set_Nodos, set_Ords, set_Referencias, param_NOD_REF, set_Ordenes, set_R, param_Distancia):
     
 
-    
-
-    ## Conjuntos ------------------------------------------------------------------------
-    model.NODOS = Set( initialize = n )
-    model.O = Set( initialize = o )
-    model.REF = Set( initialize = ref )
+    ## ------------------- SETS --------------------------------
+    model.NODOS = pyo.Set( initialize = set_Nodos )
+    model.O = pyo.Set( initialize = set_Ords )
+    model.REF = pyo.Set( initialize = set_Referencias )
     def setORDENES(model, i):
-        return(list(ordenesExcel[i]))
+        return(list(set_Ordenes[i]))
     #fed
-    model.ORDENES = Set(model.O, initialize = setORDENES)
+    model.ORDENES = pyo.Set(model.O, initialize = setORDENES)
     def setR(model, i):
-        return(list(rExcel[i]))
+        return(list(set_R[i]))
     #fed
-    model.R = Set(model.O, initialize = setR)
+    model.R = pyo.Set(model.O, initialize = set_R)
 
 
 
     def junte(model):
         return((o,i,j) for o in model.O for i in model.ORDENES[o] for j in model.ORDENES[o] )
     #fed
-    model.OROR = Set(dimen =3, initialize = junte )
+    model.OROR = pyo.Set(dimen =3, initialize = junte )
 
     def junte2(model):
         return((o,i) for o in model.O for i in model.ORDENES[o] )
     #fed
-    model.OX = Set(dimen = 2, initialize = junte2 )
+    model.OX = pyo.Set(dimen = 2, initialize = junte2 )
 
     def junte3(model):
         return((o,i,j) for o in model.O for i in model.R[o] for j in model.R[o] )
     #fed
-    model.ORR = Set(dimen = 3, initialize = junte3 )
+    model.ORR = pyo.Set(dimen = 3, initialize = junte3 )
 
     def junte4(model):
         return((o,i) for o in model.O for i in model.R[o] )
     #fed
-    model.OR  = Set(dimen = 2, initialize = junte4 )
+    model.OR  = pyo.Set(dimen = 2, initialize = junte4 )
 
 
-    ## Parámetros -------------------------------------------------------------------------------
+    ## --------------------- PARAMETERS -------------------------------------
     def paramDistancia(model, i, j):
-        return(dist[i][j])
+        return(param_Distancia[i][j])
     #fed
-    model.Distancia = Param(model.NODOS,model.NODOS, initialize = paramDistancia)
+    model.Distancia = pyo.Param(model.NODOS,model.NODOS, initialize = paramDistancia)
+    
     def paramNodRef(model, i):
-        return(ubic[i])
+        return(param_NOD_REF[i])
     #fed
-    model.Nod_Ref = Param(model.REF, initialize = paramNodRef) 
+    model.Nod_Ref = pyo.Param(model.REF, initialize = paramNodRef) 
 
-    def dinit(model, i ,j):
+    def paramDistR(model, i ,j):
         return model.Distancia[model.Nod_Ref[i],model.Nod_Ref[j]]
     #fed
-    model.Distancia_R = Param(model.REF,model.REF, initialize = dinit,mutable = True)
+    model.Distancia_R = pyo.Param(model.REF, model.REF, initialize = paramDistR, mutable = True)
 
-    ## Variables ---------------------------------------------------------------------------------
-    model.x = Var(model.OROR, domain = Binary)
-    model.aux = Var(model.OR)
-    model.Dist_ORD = Var(model.O)
+    ## ----------------------- VARIABLES ---------------------------------------
+    model.x = pyo.Var(model.OROR, domain = pyo.Binary)
+    model.aux = pyo.Var(model.OR)
+    model.Dist_ORD = pyo.Var(model.O)
 
 
-    ## Función Objetivo ---------------------------------------------------------------------------------
+    ## -------------------------- OBJECTIVE FUNCTION ------------------------------------
     def ObjFunc(model):
         return sum(model.Distancia_R[i,j]*model.x[o,i,j] for o in model.O for i in model.ORDENES[o] for j in model.ORDENES[o])
     #fed
-    model.FO = Objective(rule = ObjFunc)
+    model.FO = pyo.Objective(rule = ObjFunc)
 
 
-    ## Restricciones ---------------------------------------------------------------------------------
+    ## --------------------------- RESTRICTIONS ----------------------------------------------
     def r1(model, o, i):
         return sum( model.x[o,i,j] for j in model.ORDENES[o]) == 1
     #fed
-    model.r1 = Constraint( model.OX, rule = r1 )
+    model.r1 = pyo.Constraint( model.OX, rule = r1 )
 
     def r2(model, o, j):
         return sum( model.x[o,i,j] for i in model.ORDENES[o]) == 1
     #fed
-    model.r2 = Constraint( model.OX,  rule = r2 )
+    model.r2 = pyo.Constraint( model.OX,  rule = r2 )
 
     def r3(model, o, i):
         return model.x[o,i,i] == 0
     #fed
-    model.r3 = Constraint( model.OX,  rule = r3 )
+    model.r3 = pyo.Constraint( model.OX,  rule = r3 )
 
     def r4(model, o, i, j):
         if ( i != j ):
             return model.aux[o,i] - model.aux[o,j] + len(model.R[o])*model.x[o,i,j] <= len(model.R[o]) - 1 
-        return Constraint.Skip
+        return pyo.Constraint.Skip
     #fed
-    model.r4 = Constraint( model.ORR,  rule = r4 )
+    model.r4 = pyo.Constraint( model.ORR,  rule = r4 )
 
     def r5(model, o):
         return model.Dist_ORD[o] == sum( model.x[o,i,j]*model.Distancia_R[i,j] for i in model.ORDENES[o] for j in model.ORDENES[o] )
     #fed
-    model.r5 = Constraint( model.O, rule = r5)
-
+    model.r5 = pyo.Constraint( model.O, rule = r5)
 
 #fed
 
 
-def imprimirResultadosXLSX():
+def imprimirResultadosXLSX(instance):
     ## --------------------- GUARDAR LOS RESULTADOS EN ARCHIVO EXCEL -----------------------------
     
-    # Crear libro y añadir un hoja
+    # Crear libro
     workbook = xlsxwriter.Workbook('Resultados.xlsx')
 
     ## Formatos
@@ -214,7 +211,7 @@ def imprimirResultadosXLSX():
     worksheet.merge_range(0, 0, 0, 3, "SOLUCIÓN DEL EJERCICIO", merge_format)
 
     worksheet.write(1, 0, "Distancia Total: ", merge_format)
-    worksheet.write(1, 1, value(instance.FO), cell_format)
+    worksheet.write(1, 1, pyo.value(instance.FO), cell_format)
 
     row=3
     col=0
@@ -253,12 +250,12 @@ def imprimirResultadosXLSX():
 
 
 ## Impresión de Resultados
-def imprimirResultadosConsola():
+def imprimirResultadosConsola(instance):
     print("\n\n")
     print("SOLUCIÓN DEL EJERCICIO")
     print("--------------------------")
     print("\n")
-    print("Distancia Total: ",value(instance.FO))
+    print("Distancia Total: ", pyo.value(instance.FO))
     print("\n")
     for o in instance.O:
         print("--------- Orden ",o,"----------")
@@ -276,29 +273,31 @@ def imprimirResultadosConsola():
 
 
 
-
-
-## Lectura de datos con OPENPYXL
-n, o, ref, ubic, ordenesExcel, rExcel, dist = lecturaDatos()
-
-
-## Crear Modelo Lineal con PYOMO, resolverlo con GLPK y guardarlo en variable model
-opt = SolverFactory('cplex', executable="C:\\Program Files\\IBM\\ILOG\\CPLEX_Studio1210\\cplex\\bin\\x64_win64\\cplex")
-#opt = SolverFactory('glpk')
-model = AbstractModel()
-modeloLineal(n, o, ref, ubic, ordenesExcel, rExcel, dist)
-
-## Crear una instancia del modelo y ejecutarla
-instance = model.create_instance() 
-opt.options['timelimit'] = 120
-results = opt.solve(instance, tee = False)
-#instance.display()
-
-
-## Imprimir resultado por consola
-imprimirResultadosConsola()
-
-## Crear archivo e imprimir resultados xlsxwriter
-imprimirResultadosXLSX()
-
-
+def principal( argv ):
+    ## Lectura de datos con OPENPYXL
+    set_Nodos, set_Ords, set_Referencias, param_NOD_REF, set_Ordenes, set_R, param_Distancia = lecturaDatos()
+    
+    
+    ## Crear Modelo Lineal con PYOMO, resolverlo con GLPK y guardarlo en variable model
+    opt = SolverFactory('cplex', executable="C:\\Program Files\\IBM\\ILOG\\CPLEX_Studio1210\\cplex\\bin\\x64_win64\\cplex")
+    #opt = SolverFactory('glpk')
+    model = pyo.AbstractModel()
+    modeloLineal(model, set_Nodos, set_Ords, set_Referencias, param_NOD_REF, set_Ordenes, set_R, param_Distancia)
+    
+    ## Crear una instancia del modelo y ejecutarla
+    instance = model.create_instance() 
+    opt.options['timelimit'] = 120
+    opt.solve(instance, tee = False)
+    #instance.display()
+    
+    
+    ## Imprimir resultado por consola
+    imprimirResultadosConsola(instance)
+    
+    ## Crear archivo e imprimir resultados xlsxwriter
+    imprimirResultadosXLSX(instance)
+#fed
+        
+if __name__ == "__main__":
+    principal( sys.argv )
+#fi

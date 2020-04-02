@@ -6,7 +6,7 @@ from pyomo.opt import SolverFactory
 
 ## ----------------------- MODELO -------------------------------
 ## Indicación de Solver
-opt = SolverFactory('cplex', executable="C:\\Program Files\\IBM\\ILOG\\CPLEX_Studio1210\\cplex\\bin\\x64_win64\\cplex")
+opt = SolverFactory('cplex', executable="C:\\Program Files\\IBM\\ILOG\\CPLEX_Studio128\\cplex\\bin\\x64_win64\\cplex")
 model = pyo.AbstractModel()
 
 ## ------------------- SETS --------------------------------

@@ -6,7 +6,7 @@ from pyomo.opt import SolverFactory
 
 ## ----------------------- MODELO -------------------------------
 ## Indicación de Solver
-opt = SolverFactory('cplex', executable="C:\\Program Files\\IBM\\ILOG\\CPLEX_Studio128\\cplex\\bin\\x64_win64\\cplex")
+opt = SolverFactory('cplex', executable="C:\\Program Files\\IBM\\ILOG\\CPLEX_Studio1210\\cplex\\bin\\x64_win64\\cplex")
 model = pyo.AbstractModel()
 
 ## ------------------- SETS --------------------------------
@@ -87,8 +87,8 @@ def r5(model, o):
 model.r5 = pyo.Constraint( model.O, rule = r5)
 
 ## ============== Create a model instance and optimize ==============
-instance = model.create_instance('picking2.dat') 
-opt.options['timelimit'] = 500
+instance = model.create_instance('P_A_M_1.dat') 
+opt.options['timelimit'] = 15
 results = opt.solve(instance, tee = False)
 #instance.display()
 ## ==================================================================

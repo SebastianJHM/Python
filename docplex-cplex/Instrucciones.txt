@@ -1,0 +1,7 @@
+Ir a carpeta de installacion en consola:
+C:\Program Files\IBM\ILOG\CPLEX_Studio1210\cplex\python\3.7\x64_win64
+Ejecutar el siguiente comando
+python setup.py install
+
+NOTA: La carpeta a la que se entra de python en la dirección 
+debe ser la misma versión que el pytohn instalado

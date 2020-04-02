@@ -53,7 +53,9 @@ model.r4 = Constraint(model.R, model.R, rule = r4)
 
 # Create a model instance and optimize
 instance = model.create_instance('rc.dat') 
+opt.options['tmlim'] = 12
 results = opt.solve(instance)
+
 #instance.display()
 
 ## Impresión de Resultados

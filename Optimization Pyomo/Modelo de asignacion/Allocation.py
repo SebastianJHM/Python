@@ -2,7 +2,7 @@ import pyomo.environ as pyo
 from pyomo.opt import SolverFactory
 
 ## ----------------------- MODELO -------------------------------
-opt = SolverFactory('cplex', executable="C:\\Program Files\\IBM\\ILOG\\CPLEX_Studio128\\cplex\\bin\\x64_win64\\cplex")
+opt = SolverFactory('cplex', executable="C:\\Program Files\\IBM\\ILOG\\CPLEX_Studio1210\\cplex\\bin\\x64_win64\\cplex")
 #opt = SolverFactory('glpk')
 model = pyo.AbstractModel()
 
@@ -65,8 +65,8 @@ model.r9 = pyo.Constraint( model.REF, model.RACKS, rule = r9 )
 
 
 ## ============= Create a model instance and optimize =================
-instance = model.create_instance('Data_Allocation_6.dat')
-opt.options['timelimit'] = 900
+instance = model.create_instance('Data_Allocation_1.dat')
+opt.options['timelimit'] = 40
 results = opt.solve(instance, tee = False)
 #instance.display()
 ## ====================================================================
@@ -123,5 +123,5 @@ def print_result_console( instance ):
     #rof
     print("Función Objetivo: ",pyo.value(instance.FO))
 #fed
-    
+
 print_result_console( instance )
