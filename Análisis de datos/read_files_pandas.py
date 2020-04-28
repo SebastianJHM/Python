@@ -13,7 +13,7 @@ def principal(argv):
     url = "https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data"
     path = "C:\\Users\\USUARIO1\\Desktop\\Python\\Análisis de datos\\Data Autos\\imports-85.data"
     
-    df = pd.read_csv(url, header = None) ## La función read_csv asume que el texto viene con encabezado
+    df = pd.read_csv(path, header = None) ## La función read_csv asume que el texto viene con encabezado
     
     ## The head(n) function returns the first n data
     ## The tail(n) function returns the last n data data
@@ -31,17 +31,17 @@ def principal(argv):
     ## This the way to convert the data in a matrix. 
     ## df.index = RangeIndex(start=0, stop=205, step=1) ; list(df.index) = [0,...,205]
     ## df.columns = Int64Index([ 0,  1, ... , 24, 25],dtype='int64') ; list(df.columns) = [0,...,25]
-    ## The form to read df in [col][row]
-    mat = []
+    ## The form to read df is [col][row]
+    data_matrix = []
     for row in list(df.index):
         rows = []
         for col in list(df.columns):
             rows.append(df[col][row])
         #rof
-        mat.append(rows)
+        data_matrix.append(rows)
     #rof
     print("\n\n============ PRINT MATRIX OF DATA ============")
-    print(np.array(mat))
+    print(np.array(data_matrix))
     
     ## SAVE PARTIAL RESULTS IN CSV FILE. Not is necessary create the file in the folder, only
     ## indicate the name in the path
