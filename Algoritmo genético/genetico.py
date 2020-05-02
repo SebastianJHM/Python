@@ -238,7 +238,7 @@ def principal( argv ):
     print(*poblacion)
     k = copy.copy(poblacion[0].fo)
     
-    for iteracion in range(2):
+    for iteracion in range(222):
         
         print("-------------- Iteración ", iteracion, "------------------")
     
