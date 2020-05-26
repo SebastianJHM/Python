@@ -128,14 +128,11 @@ def principal( argv ):
     instance = model.create_instance()
     # opt.solve(instance, tee = False)
     opt.solve(instance, opt='cplex', tee = False)
+    opt.options['timelimit'] = 2
     #instance.display()
     
     print_results_console( instance )
 #fed
-
-
-
-
 
 
 if __name__ == "__main__":

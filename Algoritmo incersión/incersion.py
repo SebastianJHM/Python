@@ -10,8 +10,39 @@ def funcion_objetivo( distancias, ruta ):
     return( acum )
 #fed
 
-def incersion( orden, distancias):
+def incersion_orden( orden, distancias):
     solucion = [0, 0]
+    verifica = [False]*(len(distancias) - 1)
+    
+    for k in range(len(orden)):
+        minimo = 1000000000000
+        #print("=========================================================")
+        for i in range(1,len(solucion)):
+            x = copy.deepcopy( solucion )
+            #print("----------------------")
+            for ref in orden:
+                y = copy.deepcopy( x )
+                y.insert(i, ref)
+                fo = funcion_objetivo( distancias, y)
+                #print( y, fo)
+                if ( fo < minimo and verifica[ref-1] == False ):
+                    minimo = fo
+                    escogido = ref
+                    z = copy.deepcopy( y )
+                #fi
+            #rof
+        #rof
+        verifica[escogido-1]  = True
+        solucion = copy.deepcopy( z )
+        #print("=========================================================")
+        #print( solucion, funcion_objetivo( distancias, solucion ))
+    #rof
+    return( solucion, funcion_objetivo( distancias, solucion ))
+#fed
+
+def incersion(distancias):
+    solucion = [0, 0]
+    orden = [i+1 for i in range(len())]
     verifica = [False]*(len(distancias) - 1)
     
     for k in range(len(orden)):
@@ -62,8 +93,19 @@ def principal( argv ):
         [29, 22, 35, 34, 38, 20, 29, 24, 30, 43, 39, 49, 45, 37, 38, 25, 47, 0, 20],
         [38, 38, 43, 42, 41, 43, 27, 37, 35, 37, 28, 32, 30, 50, 36, 38, 34, 20, 0]
     ]
-    orden = [5, 2, 1, 18, 7, 11, 6, 14, 8, 3]
-    ruta, fo = incersion( orden, distancias)
+    
+    distancias = [
+    [0, 20, 25, 30, 40, 35],
+    [20, 0, 10, 25, 30, 45],
+    [25, 10, 0, 30, 35, 40],
+    [30, 25, 30, 0, 25, 35],
+    [40, 30, 35, 25, 0, 15],
+    [35, 45, 40, 35, 15, 0]
+    ]
+
+    orden = [i+1 for i in range(5)]
+    ruta, fo = incersion_orden( orden, distancias)
+    # ruta, fo = incersion(distancias)
     print(ruta, fo)
 #fed
 
