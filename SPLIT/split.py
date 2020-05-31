@@ -76,7 +76,7 @@ def SPLIT(Distancias, Demandas, permutacion, capacidad, orden):
 
 def principal(argv):
     ## Capacidad del vehículo
-    capacidad = 64
+    capacidad = 110
     
     ## Matriz de distancias incluyendo el 0
     # Distancias = m.Distancias_P1
@@ -101,7 +101,7 @@ def principal(argv):
     ## Permutación
     # permutacion = [12, 24, 11, 32, 33, 23]
     # permutacion = [19, 7, 46, 29, 38, 39]
-    permutacion = [34, 41, 36, 43, 37, 25, 42]
+    permutacion = [34, 41, 36, 43, 6, 14, 18, 27, 30, 31, 3, 5, 2, 37, 25, 42]
 
     PETALOS, FO, Fo_T = SPLIT(Distancias, Demandas, permutacion, capacidad, orden)
     # r = [0, 1, 2, 0]

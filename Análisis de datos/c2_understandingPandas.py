@@ -40,8 +40,6 @@ def principal(argv):
     print(df.info())
 #fed
 
-
-
 if __name__ == "__main__":
     principal(sys.argv)
 #fi

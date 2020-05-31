@@ -6,7 +6,7 @@ import sys
 
 def main( argv ):
     
-    cadena=raw_input( "Digite la cadena: " )
+    cadena=input( "Digite la cadena: " )
     abc=["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
     cadena2=""
     x=0
@@ -25,8 +25,7 @@ def main( argv ):
             #fi        
         #rof
     #rof
-    print cadena2
-
+    print(cadena2)
 #fed
 
 
