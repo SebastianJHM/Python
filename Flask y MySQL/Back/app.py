@@ -92,9 +92,6 @@ def update_contact(id):
     #fi
 #fed
 
-
-#fed
-
 @app.route('/delete/<string:id>')
 def delete_contact(id):
     ## ELiminar de mysql

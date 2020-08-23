@@ -6,25 +6,25 @@
 <br>
 <form action="/update/{{contact.0}}" method="POST">
     
-
     <div class="card text-white bg-dark mb-3" style="text-align: center; width:360px; margin-right: auto; margin-left: auto" >
             
-            <div class="card-header" style="font-weight: bold;">EDITAR FORMULARIO</div>
+        <div class="card-header" style="font-weight: bold;">EDITAR FORMULARIO</div>
 
-            <div class="card-body">
-                
-                <form action="/add_contact" method="POST">
-                    <!--Lo que se escriba dentro del input, se va a recibir como valor de ese nombre-->
-                    <input type="text" name="fullname" placeholder="Fullname" value={{contact.1}} class="form-control" style="width: 300px; margin-right: auto; margin-left: auto">
-                    <br>
-                    <input type="text" name="phone" placeholder="Phone" value={{contact.2}} class="form-control" style="width: 300px; margin-right: auto; margin-left: auto">
-                    <br>
-                    <input type="text" name="email" placeholder="Email" value={{contact.3}} class="form-control" style="width: 300px; margin-right: auto; margin-left: auto">
-                    <br>
-                    <button type="submit" class="btn btn-success" style="width: 300px; margin-right: auto; margin-left: auto">SAVE</button>
-                </form>
+        <div class="card-body">
+            
+            <form action="/add_contact" method="POST">
+                <!--Lo que se escriba dentro del input, se va a recibir como valor de ese nombre-->
+                <input type="text" name="fullname" placeholder="Fullname" value={{contact.1}} class="form-control" style="width: 300px; margin-right: auto; margin-left: auto">
+                <br>
+                <input type="text" name="phone" placeholder="Phone" value={{contact.2}} class="form-control" style="width: 300px; margin-right: auto; margin-left: auto">
+                <br>
+                <input type="text" name="email" placeholder="Email" value={{contact.3}} class="form-control" style="width: 300px; margin-right: auto; margin-left: auto">
+                <br>
+                <button type="submit" class="btn btn-success" style="width: 300px; margin-right: auto; margin-left: auto">SAVE</button>
+            </form>
 
-            </div>
         </div>
+    </div>
+    
 </form>
 {% endblock %}
