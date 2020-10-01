@@ -1,0 +1,11 @@
+#!/bin/bash
+> oldFiles.txt
+for j in `grep " jane " ../data/list.txt | cut -d ' ' -f 3`; do
+   echo "~$j"
+   if test -e ~/$j; then
+      echo "/home/student-01-657ca83ec722$j" >> oldFiles.txt
+   else
+      echo "File doesn't exist"
+   fi
+done
+
