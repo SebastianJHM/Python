@@ -13,14 +13,16 @@ def principal( argv ):
     ## "x" - Create - Creates the specified file, returns an error if the file exists
 
 
-
+    print("========== 1")
     temp = open('read.txt','r').readlines()
     print(temp)
 
+    print("========== 2")
     file1  = open('read.txt','r')
     temp = file1.read().splitlines()
     print(temp)
 
+    print("========== 3")
     ## Read Lines while
     ## The advantages ow with is that we don't have to close the file
     filepath = 'read.txt'
@@ -35,6 +37,7 @@ def principal( argv ):
         #elihw
     #htiw
 
+    print("========== 4")
     ## Read file for
     filepath = 'read.txt'
     with open(filepath) as fp:
@@ -42,7 +45,26 @@ def principal( argv ):
             print("Line {}: {}".format(cont, line))
         #elihw
     #htiw
+    
+    print("========== 5")
+    ## Read file for
+    filepath = 'read.txt'
+    with open(filepath) as fp:
+        for line in fp:
+            print(line)
+        #elihw
+    #htiw
 
+    print("========== 6")
+    ## Read file for
+    filepath = 'read.txt'
+    with open(filepath) as fp:
+        for line in fp:
+            print(line.strip())
+        #elihw
+    #htiw
+    
+    print("========== 7")
     ## Read file readlines() vs readline()
     ## readline(): read the first line that was appointed
     ## readlines(): read the rest
@@ -56,6 +78,7 @@ def principal( argv ):
         print(b)
     #htiw
 
+    print("========== 8")
     filepath = 'read.txt'
     with open(filepath) as fp:
         ## Read the first 3 chracters
@@ -65,7 +88,7 @@ def principal( argv ):
         a = fp.readline(4)
         print(a)
     #htiw
-
+    fp.close()
 #fed
 
 

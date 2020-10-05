@@ -3,7 +3,7 @@ import csv
 import json
 
 def principal( argv ):
-    path = "C:\\Users\\SebastianHerrera\\Desktop\\Python\\ReadCSVandJSON\\subvenciones-educacion2016.csv"
+    path = "subvenciones-educacion2016.csv"
     with open(path, encoding='latin1') as archivo_csv:
         dict_lector = csv.DictReader(archivo_csv)
         #  next(dict_lector, None)  # Se salta la cabecera
@@ -20,7 +20,7 @@ def principal( argv ):
     #htiw
 
     print("\n-------- JSON ------------")
-    path = "ReadCSVandJSON\\datosColombia.json"
+    path = "datosColombia.json"
     with open(path, encoding="utf8") as fich:    
         datos = json.load(fich)    
         ## print(datos["meta"]["view"]["columns"])
