@@ -1,0 +1,104 @@
+XPATH: https://devhints.io/xpath, https://platzi.com/clases/1908-web-scraping/28519-resumen-de-xpath/
+XPATH es a HTML lo que las expresiones regulares son a un texto. Una forma
+de encontrar coincidencias dentro del dentro del dcoumento HTML.
+
+Formato Básico de consulta: 
+$x()
+
+Todo el documento:
+$x(/)
+
+Etiqueta específica:
+$x(/html)
+
+Salatar jerarquía:
+$x(//div)
+
+Acceder a etiquetas padres:
+$x(//div/..)
+
+Acceder a los atributos de las etiquetas
+$x('//div/@class')
+
+
+
+Predicados --
+
+El primero de una lista
+$x('/html/body/div/div[1]')
+
+El primero de una lista
+$x('/html/body/div/div[last()]')
+
+Todos los span que tienen atributo class
+$x('//span[@class]')
+
+Todos los span que tienen atributo class igual a text
+$x('//span[@class="text"]')
+
+Obetener el texto que esten dentro de las etiquetas span que cumplan con la condición
+$x('//span[@class="text"]/text()').map(x => x.wholeText)
+
+
+Operadores --
+Diferente
+$x('//span[@class!="text"]')
+
+Mayor a 1 de la lista
+$x('/html/body/div/div[position()>1]')
+
+El primero de la lista
+$x('/html/body/div/div[position()=1]')
+
+OR
+$x('//span[@class="text" or @class="tag]')
+
+NEGATION
+$x('//span[not@class="text"]')
+
+
+Comodines --
+Trae todo el documento porque representa la raíz de nuestro el html
+$x('/')
+
+después de / pide que traiga todos los nodos que están debajo de / (* es el primer wildcard)
+$x('/*') <- 
+
+Trae todos los nodos que están inmediatamente después de html
+$x('/html/*')
+
+// es la expresión para saltar todos los niveles y con el * en todas las direcciones. Trae todos 
+los nodos y todos los atributos de estos nodos.
+$x('//*') 
+
+Trae todos los span, que tengan como clase “text”, con @* trae todos los atributos. 
+Dicho de otra forma, trae todos los atributos de todos los nodos de tipo span de clase “text”.
+$x('//span[@class="text]/@*')
+
+Todos los atributos (usando @*) de todos los div (usando //div) que están después de body.
+$x('/html/body//div/@*')
+
+Trae todos los span que sean de clase “text” que tengan un atributo @itemprop “text” y de ahí 
+(usando node()) traer todo lo que esté dentro de los spam que cumplen las condiciones
+$x('//span[@class="text" and @itemprop="text"]/node()')
+
+node() a diferencia de * trae no solamente los nodos, sino también todo el contenido
+
+
+Buscar en el texto --
+Para buscar cadenas de caracteres especificas dentro de un texto.
+start-with(.“Texto a buscar”): Empezar con, el punto hace referencia al nodo actual.
+$x('//small[@class="author"and starts-with(.,"A")]/text()').map(x => x.wholeText)
+#Devuelve (4) ["Albert Einstein", "Albert Einstein", "Albert Einstein", "André Gide"]
+
+
+contains (., “Texto a buscar”) : Sirve para llamar por el texto contenido en.
+$x('//small[@class="author"and contains(., "g")]/text()').map(x => x.wholeText)
+#Devuelve ["J.K. Rowling"]
+
+
+Nota: Debido a las versiones del lenguaje Xpath en los navegadores
+las funciones end-with y matches no están disponibles, pero una ve en código python corren sin problemas.
+
+end-with(.,""): Termina en.
+matches(.,""): Sirve para hacer una

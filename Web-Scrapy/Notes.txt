@@ -1,0 +1,15 @@
+HTTP: protocolo de transferencia de hipertexto
+Posibles status de respuesta
+Status code 200 – OK.
+Status code 301 – Moved Permanently.
+Status code 302 – Moved Temporarily.
+Status code 403 – Forbidden
+Status code 404 – Not Found
+Status code 500 – Internal Server Error
+Status code 503 ­– Service Unavailable
+
+ROBOTS.TXT
+En cada sitio web al que sea posible realizarle web scraping tiene un arhivo 
+robots.txt en los que indica las direcciones a las que el sitio no quiere que
+se le realize web scraping. Cuando nosotros contruimos un sitio web también 
+es importante agregar el archivo robots.txt. https://www.youtube.com/robots.txt

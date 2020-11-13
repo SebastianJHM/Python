@@ -1,0 +1,44 @@
+## Verifica que la dirección exista
+class sysctl{
+    file{'etc/sysctl.d':
+        ensure => directory,
+    }
+}
+
+class timezone{
+    file{'etc/timezone':
+        ensure => file, ## Es un archivo no un directorio
+        content => "UTC/n",
+        replace => true,
+    }
+}
+
+una clase que instale un paquete, establezca el contenido de un 
+archivo de configuración e inicia el servicio proporcionado por ese paquete.
+class ntp {
+    package { 'ntp':
+        ensure => latest, ## Nuestras reglas garantizan que el paquete NTP siempre se actualice a la última versión.
+    },
+    file { '/etc/ntp.conf':
+        source => 'puppet:///modules/ntp/ntp.conf',
+        replace => true,
+    },
+    service { 'ntp':
+        enable => true,
+        ensure => running,
+    }
+}
+
+class AutoConfig {
+  package { 'Executable':
+    ensure => latest,
+  }
+  file { 'executable.cfg':
+    source => 'puppet:///modules/executable/Autoconfig/executable.cfg'
+    replace => true,
+  }
+  service { 'executable.exe':
+    enable  => true,
+    ensure  => running,
+  }
+}

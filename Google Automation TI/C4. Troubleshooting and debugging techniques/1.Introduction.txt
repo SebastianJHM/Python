@@ -1,0 +1,15 @@
+Pasos para solucionar cualquier problema técnico:
+
+1. Obetener información.
+Caso de reproducción: ¿Cómo y cuándo aparece el problema?
+
+2. Encontrar la causa raíz del problema.
+
+3. Realizar una repración necesaria
+
+------
+HERRAMIENTAS DE LINUX
+Strace nos permite mirar mas profundamente lo que está haciendo el programa.
+Rastreará las llamadas al sistema y mostrará los resultados
+
+
