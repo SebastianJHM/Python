@@ -117,9 +117,11 @@ def principal( argv ):
     ]
 
     ## DECLARE SOLVER, CREATE A PYOMO ABSTRACT MODEL, DECLARE LINEAR MODEL
-    #opt = SolverFactory('cplex', executable="C:\\Program Files\\IBM\\ILOG\\CPLEX_Studio1210\\cplex\\bin\\x64_win64\\cplex")
-    #opt = SolverFactory('glpk', executable="C:\\Users\\USUARIO1\\Desktop\\Programas\\Gusek\\GUSEK PRINCIPAL\\glpsol")
-    opt = SolverFactory("gurobi", solver_io="python")
+    # opt = SolverFactory('cplex', executable="C:\\Program Files\\IBM\\ILOG\\CPLEX_Studio1210\\cplex\\bin\\x64_win64\\cplex")
+    # opt = SolverFactory('glpk', executable="C:\\Users\\USUARIO1\\Desktop\\Programas\\Gusek\\GUSEK PRINCIPAL\\glpsol")
+    # opt = SolverFactory("gurobi", solver_io="python")
+    opt = SolverFactory("cbc", executable="C:\\Users\\USUARIO1\\Desktop\\CBC\\COIN-OR\\win32-msvc12\\bin\\cbc")
+    
     # opt = pyo.SolverManagerFactory('neos')
     model = pyo.AbstractModel()
     create_lineal_model_tardiness( model, TP )

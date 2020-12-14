@@ -42,7 +42,7 @@ def incersion_orden( orden, distancias):
 
 def incersion(distancias):
     solucion = [0, 0]
-    orden = [i+1 for i in range(len())]
+    orden = [i+1 for i in range(len(distancias)-1)]
     verifica = [False]*(len(distancias) - 1)
     
     for k in range(len(orden)):
@@ -103,9 +103,9 @@ def principal( argv ):
     [35, 45, 40, 35, 15, 0]
     ]
 
-    orden = [i+1 for i in range(5)]
-    ruta, fo = incersion_orden( orden, distancias)
-    # ruta, fo = incersion(distancias)
+    # orden = [i+1 for i in range(5)]
+    # ruta, fo = incersion_orden( orden, distancias)
+    ruta, fo = incersion(distancias)
     print(ruta, fo)
 #fed
 
